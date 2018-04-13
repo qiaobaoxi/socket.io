@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/core.js" type="text/js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    </head>
+
+    <body>
+       <div><input type="text" class="j-send"><button class="j-btn">发送</button></div>
+       <textarea name="" id="" cols="30" rows="10" class="j-content"></textarea>
+    </body>
+    <script>
+        var sendNode=document.getElementsByClassName('j-send')[0]
+        var btnNode=document.getElementsByClassName('j-btn')[0]
+        var contentNode=document.getElementsByClassName('j-content')[0]
+        //建立连接
+        socket = io.connect('ws://127.0.0.1:3000');
+        btnNode.onclick=function(){
+            var sendText = sendNode.value;
+            //向服务端发送信息
+            socket.emit("message", {msg:sendText});
+        }
+        //接收服务端推送的信息
+        socket.on("message", function(obj) {
+            var curContent = contentNode.innerHTML;
+            contentNode.innerHTML=curContent+obj.msg;
+        });
+    </script>
+</html>
